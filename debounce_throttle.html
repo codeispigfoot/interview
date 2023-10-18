@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>京东金融</title>
+</head>
+<body>
+
+<div class="mod">
+  <p>测试一下keyup事件：</p>
+  <input id="input"></input>
+  <p>测试一下加了防抖的keyup事件：</p>
+  <input id="input_debounce"></input>
+  <p>测试一下加了节流的keyup事件：</p>
+  <input id="input_throttle"></input>
+</div>
+<script>
+  let inputHtml = document.getElementById('input');
+  let inputDebounceHtml = document.getElementById('input_debounce');
+  let inputThrottleHtml = document.getElementById('input_throttle');
+  function ajax(val) {
+    console.log('ajax request' + val);
+    // console.log('1111')
+  }
+  // 防抖函数
+  function _debounce(fn, delay) {
+    let timer = null;
+    return function() {
+      clearTimeout(timer);
+      let that = this;
+      let _args = arguments;
+      timer = setTimeout(() => {
+        console.error(_args)
+        fn.apply(that, _args);
+      }, delay)
+    }
+  }
+  // 节流
+  function _throttle(fn, delay) {
+    let timer = null,
+    last;
+    return function(...args) {
+      let that = this;
+      let now = +new Date();
+      if (last && last + delay > now) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          last = now;
+          fn.apply(that, args);
+        }, delay)
+      } else {
+        last = now;
+        fn.apply(that, args);
+      }
+    }
+  }
+  let debounceFun = _debounce(ajax, 2000);
+  let throttleFun = _throttle(ajax, 2000)
+  inputHtml.addEventListener('keyup', function(e) {
+    ajax(e.target.value)
+  })
+  // 添加防抖
+  inputDebounceHtml.addEventListener('keyup', function(e) {
+    // console.error(window, 'pppp')
+    debounceFun(e.target.value)
+  })
+  // 添加节流
+  inputThrottleHtml.addEventListener('keyup', function(e) {
+    throttleFun(e.target.value);
+  })
+</script>
+</body>
+</html>
