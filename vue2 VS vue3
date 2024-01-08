@@ -1,0 +1,77 @@
+# Vue2项目升级Vue3
+
+## 一、vue2跟vue3有什么不同？
+
+### 1、全局API 应用实例
+
+参考文档：https://v3-migration.vuejs.org/zh/breaking-changes/global-api.html
+
+#### Vue2
+
+vue2中全局api和配置可以全局改变vue的行为，比如注册一个全局组件，由于vue2中没有app的概念，我们定义的应用只是通过new Vue()创建的根vue实例。从同一个Vue构造函数创建的每个根实例共享相同的全局配置，因此：
+
+- 全局配置容易相互污染
+- 全局配置使得在同一页面上的多个应用在全局配置不同时共享同一个Vue副本非常困难
+
+```javascript
+// 这会影响到所有根实例
+Vue.mixin({
+  /* ... */
+})
+
+const app1 = new Vue({ el: '#app-1' })
+const app2 = new Vue({ el: '#app-2' })
+```
+
+#### Vue3
+
+vue3中引入了新的全局API：createApp
+
+调用createApp返回一个应用实例，**任何全局改变Vue行为的API现在都会移动到应用实例上。**
+
+```javascript
+import { createApp } from 'vue'
+
+const app = createApp({})
+```
+
+### 2、响应式的实现
+
+参考文档：https://juejin.cn/post/7243607462008078373?searchId=202401081436003C809A1037E11A3A4AF8
+
+### 3、组合式API VS 选项式API
+
+### 4、Vite替代Webpack
+
+
+
+## 二、迁移过程中需要注意哪些问题
+
+### 1、兼容性问题
+
+vue3实现响应式的方式为Proxy，不支持IE11以下的版本
+
+### 2、相关依赖升级
+
+#### 2.1 vue相关依赖
+
+Vuex、vue-router、vue-cli等
+
+#### 2.2 第三方组件库、插件
+
+Element ui等
+
+### 3、写法的兼容
+
+存在一些废弃的api
+
+参考文档：https://v3-migration.vuejs.org/zh/breaking-changes/events-api.html
+
+#### 事件API
+
+#### 生命周期 
+
+
+
+
+
